@@ -3,7 +3,7 @@ import logging
 import re
 
 from shared.models import Document
-
+from shared.constants import ModelConstants
 
 filename_pattern = re.compile(r"([^/]+)(?=\.[^.]+$)")
 
@@ -41,9 +41,9 @@ class Loader:
                                 page_content=content,
                                 title=title,
                                 metadata={
-                                    "page": page_num,
-                                    "source": path,
-                                    "title": title,
+                                    ModelConstants.KEY_PAGE: page_num,
+                                    ModelConstants.KEY_SOURCE: path,
+                                    ModelConstants.KEY_TITLE: title,
                                 },
                             )
                         )

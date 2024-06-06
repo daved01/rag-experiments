@@ -1,9 +1,11 @@
 from openai import OpenAI
 
+from shared.constants import ConfigConstants
+
 
 class OpenAILLM:
     def __init__(self, config: dict) -> None:
-        self.model = config["llm"]
+        self.model = config[ConfigConstants.KEY_LLM]
         self.client = OpenAI()
 
     def chat_request(self, text: str) -> str:

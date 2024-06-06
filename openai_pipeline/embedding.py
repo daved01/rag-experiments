@@ -3,6 +3,7 @@ from openai import OpenAI
 import logging
 
 from shared.models import Document
+from shared.constants import ConfigConstants
 
 
 class OpenAIEmbeddings:
@@ -10,7 +11,7 @@ class OpenAIEmbeddings:
 
     def __init__(self, config_openai: dict) -> None:
         self.logger = logging.getLogger(self.__class__.__name__)
-        self.model = config_openai["embedding"]
+        self.model = config_openai[ConfigConstants.KEY_EMBEDDING]
         self.client = OpenAI()
 
     def get_embeddings(self, texts: list[str]) -> list[list[float]]:

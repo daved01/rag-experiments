@@ -2,6 +2,7 @@ import chromadb
 import uuid
 import logging
 from typing import Optional
+from shared.constants import ConfigConstants, DatabaseConstants
 
 from shared.models import Document
 
@@ -9,7 +10,11 @@ from shared.models import Document
 class ChromaDB:
     def __init__(self, config: dict, collection_name: str) -> None:
         self.logger = logging.getLogger(self.__class__.__name__)
-        self.client = chromadb.PersistentClient(path=config["database"]["path"])
+        self.client = chromadb.PersistentClient(
+            path=config[ConfigConstants.KEY_CONFIG_DATABASE][
+                ConfigConstants.KEY_CONFIG_PATH
+            ]
+        )
         self.collection = self._get_or_create_collection(collection_name)
         self.n_results = 5
 
@@ -52,7 +57,7 @@ class ChromaDB:
             n_results=self.n_results,
         )
 
-        docs = response_obj.get("documents", [])
+        docs = response_obj.get(DatabaseConstants.KEY_DATABASE_DOCUMENTS, [])
         assert len(docs) == len(query_embeddings)
 
         return docs

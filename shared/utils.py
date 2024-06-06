@@ -3,6 +3,8 @@ import time
 import logging.config
 import yaml
 
+from shared.constants import ConfigConstants
+
 
 def load_prompt_queries(query_file):
     with open(query_file, "r") as file:
@@ -15,7 +17,7 @@ def load_config(config_file: str) -> dict:
         return yaml.safe_load(file)
 
 
-def setup_logging(config_file="logging.yaml"):
+def setup_logging(config_file=ConfigConstants.DEFAULT_LOGGING_FILE):
     with open(config_file, "r") as file:
         config = yaml.safe_load(file)
         logging.config.dictConfig(config)
@@ -33,5 +35,4 @@ def create_prompt(template, query: str, contexts: list[str]) -> str:
     """Constructs a prompt from a template, a query, and a list of contexts."""
     contexts_strs = "|".join(contexts)
     prompt = template.format(query=query, contexts=contexts_strs)
-    print(prompt)
     return prompt
