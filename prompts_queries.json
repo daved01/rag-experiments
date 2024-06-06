@@ -1,0 +1,13 @@
+{
+    "prompt": "Answer the question below with the contexts provided below. If the answer is not in the contexts, say `I don't know!` Question: {query} Contexts: {contexts}",
+    "queries": [
+        {
+            "id": 1,
+            "text": "How does retrieval-augmented generation work?"
+        },
+        {
+            "id": 2,
+            "text": "What does RAG stand for?"
+        }
+    ]
+}
