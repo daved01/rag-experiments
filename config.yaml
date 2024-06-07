@@ -2,7 +2,7 @@
 
 loader:
   paths: 
-    - "/Users/David/Downloads/lora.pdf"
+    - "/Users/David/Downloads/Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks.pdf"
 
 splitter:
   method: "recursive"
@@ -22,4 +22,4 @@ pipelines:
     llm: "llama3"
 
 output:
-  directory: "results"
+  directory: "data/results"

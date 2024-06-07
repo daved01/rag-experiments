@@ -1,13 +1,15 @@
 import chromadb
-import uuid
 import logging
 from typing import Optional
-from shared.constants import ConfigConstants, DatabaseConstants
+import uuid
 
+from shared.constants import ConfigConstants, DatabaseConstants
 from shared.models import Document
 
 
 class ChromaDB:
+    """Chroma database methods."""
+
     def __init__(self, config: dict, collection_name: str) -> None:
         self.logger = logging.getLogger(self.__class__.__name__)
         self.client = chromadb.PersistentClient(

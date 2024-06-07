@@ -16,12 +16,10 @@ I am working on the blog post series and the experiments for it and will be addi
 
 Run `pip install -r requirements`.
 
-Configure the app in the `config.yaml` file.
-
-Add queries to run in the `queries.json` file. Queries are run sequentially.
+Configure the app settings in the `config.yaml` file.
 
 Then you can run the ingestion script `python run_ingestion.py` to ingest data into your database.
 
-Once you have data, run `python run_experiments.py`.
+Once you have data in the database you can run queries. To do so, add queries in the `prompts_queries.json` file and run `python run_experiments.py`. There will be one run for each query.
 
-You will get a file with the results.
+You will get a file with the results in `data/results`.

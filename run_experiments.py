@@ -1,6 +1,10 @@
 from openai_pipeline import OpenAIPipeline
 from shared.models import ExperimentResults
-from shared.utils import load_config, load_prompt_queries
+from shared.utils import (
+    load_config,
+    load_prompt_queries,
+    save_experiment_results_to_json,
+)
 from shared.constants import ConfigConstants
 
 
@@ -15,7 +19,6 @@ def main():
 
     # OpenAI
     openai_pipeline = OpenAIPipeline(config, prompts_queries)
-    # results_openai: Optional[list[str]] = run_openai(config, prompt, queries)
     results_openai: ExperimentResults = openai_pipeline.run_queries()
     print(f"\nResults OpenAI run:\n{results_openai}")
 
@@ -25,6 +28,7 @@ def main():
     # Save results to a file
 
     # save_results(config["output"])
+    save_experiment_results_to_json(results_openai, config["output"]["directory"])
 
 
 if __name__ == "__main__":

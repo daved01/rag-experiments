@@ -45,7 +45,10 @@ class OpenAIPipeline:
         results = ExperimentResults(
             results=[],
             model=self.model,
-            parameters={},
+            parameters=[
+                self.config[ConfigConstants.KEY_SPLITTER],
+                self.config[ConfigConstants.KEY_PIPELINES][ConfigConstants.KEY_OPENAI],
+            ],
             timestamp_end=None,
         )
 

@@ -1,5 +1,5 @@
-import PyPDF2
 import logging
+from pypdf import PdfReader
 import re
 
 from shared.models import Document
@@ -32,7 +32,7 @@ class Loader:
             try:
                 title = self._extract_filename(path)
                 with open(path, "rb") as file:
-                    reader = PyPDF2.PdfReader(file)
+                    reader = PdfReader(file)
                     for page_num in range(len(reader.pages)):
                         page = reader.pages[page_num]
                         content = page.extract_text()
@@ -41,7 +41,7 @@ class Loader:
                                 page_content=content,
                                 title=title,
                                 metadata={
-                                    ModelConstants.KEY_PAGE: page_num,
+                                    ModelConstants.KEY_PAGE: page_num + 1,
                                     ModelConstants.KEY_SOURCE: path,
                                     ModelConstants.KEY_TITLE: title,
                                 },
