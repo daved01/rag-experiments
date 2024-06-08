@@ -66,7 +66,7 @@ Once installed you can run experiments on the pipelines. To configure them, use 
 
 The project is modular and meant to be extended. You can add advanced methods to the existing pipeline or introduce new pipelines. The structure allows for easy modifications and enhancements.
 
-## File Structure
+### File Structure
 
 - `run_*.py`: Main code that brings together the other modules to run ingestion or experiments.
 - `shared`: Contains code that is shared of each component, including loader and splitter. Note that the database uses collections to separate data for each pipeline.
@@ -78,7 +78,17 @@ Each pipeline contains two parts.
 - `llm.py`: Handles LLM interactions, including the prompt.
 - `embedding.py`: Manages embeddings.
 
-Feel free to explore the code to understand the structure and functionality.
+### OpenAI pipeline
+
+This pipeline uses the OpenAI embedding model `text-embedding-3-small`. It has an input token [limit](https://platform.openai.com/docs/guides/embeddings/use-cases) of `8191`, and returns a vector of length `1536`.
+
+The number of tokens of an input is checked using `tiktoken`.
+
+### Local pipeline
+
+The local pipeline uses the sentence transformer embedding model `sentence-transformers/all-MiniLM-L6-v2`, see [here](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2). It has an input token [limit](TODO) of `512` tokens, and returns a `384` dimensional array.
+
+To check the number of input tokens, the `Tokenizer` uses the `AutoTokenizer.from_pretrained(<model_name>)` method.
 
 ## Contribute
 

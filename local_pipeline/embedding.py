@@ -1,33 +1,41 @@
+from sentence_transformers import SentenceTransformer
 from typing import Any
 import logging
 
+from local_pipeline.tokenizer import Tokenizer
 from shared.models import Document
+from shared.constants import ConfigConstants
 
 
-class SentenceTransformerEmbeddings:
+class LocalEmbeddings:
     """Creates embeddings"""
 
-    def __init__(self, config_openai: dict) -> None:
+    def __init__(self, config_local: dict) -> None:
         self.logger = logging.getLogger(self.__class__.__name__)
-        self.model = config_openai["embedding"]["name"]
-        self.client = OpenAI()
+        self.model_name = config_local["embedding"]
+        self.model = SentenceTransformer(self.model_name)
+        self.tokenizer = Tokenizer(
+            config_local[ConfigConstants.KEY_EMBEDDING],
+            config_local[ConfigConstants.KEY_MAX_TOKENS],
+        )
 
-    def get_embeddings(self, texts: list[str]) -> list[float]:
+    def get_embeddings(self, texts: list[str]) -> list[list[float]]:
         """Gets the embeddings for a list of texts."""
 
         self.logger.info("Creating embeddings ...")
         texts_cleaned = [text.replace("\n", " ") for text in texts]
 
-        responses = self.client.embeddings.create(input=texts_cleaned, model=self.model)
+        if self.tokenizer.check_tokenlimit_exceeded(texts_cleaned):
+            self.logger.warning(
+                "Number of tokens exceeds the limit. Text will be truncated."
+            )
 
-        assert len(responses.data) == len(texts)
-
-        return [response.embedding for response in responses.data]
+        return self.model.encode(texts_cleaned).tolist()
 
     def add_embeddings_to_docs(self, documents: list[Document]) -> list[Document]:
         """Adds embeddings to Document objects."""
 
-        embeddings: list[float] = self.get_embeddings(
+        embeddings: list[list[float]] = self.get_embeddings(
             [doc.page_content for doc in documents]
         )
         assert len(embeddings) == len(documents)

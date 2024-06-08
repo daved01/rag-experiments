@@ -15,11 +15,12 @@ database:
 pipelines:
   openai:
     embedding: "text-embedding-3-small"
-    max_tokens: 1536
+    max_tokens: 8191
     llm: "gpt-3.5-turbo"
 
   local:
-    embedding: "sentence-transformer"
+    embedding: "sentence-transformers/all-MiniLM-L6-v2"
+    max_tokens: 512
     llm: "llama3"
 
 output:
