@@ -8,6 +8,7 @@ class ConfigConstants:
     KEY_EMBEDDING = "embedding"
     KEY_LOADER = "loader"
     KEY_LLM = "llm"
+    KEY_MAX_TOKENS = "max_tokens"
     KEY_METHOD = "method"
     KEY_OPENAI = "openai"
     KEY_PATHS = "paths"

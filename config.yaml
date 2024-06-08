@@ -6,7 +6,7 @@ loader:
 
 splitter:
   method: "recursive"
-  chunk_size: 256
+  chunk_size: 256 # Limited by embedding size
   chunk_overlap: 128
 
 database:
@@ -15,6 +15,7 @@ database:
 pipelines:
   openai:
     embedding: "text-embedding-3-small"
+    max_tokens: 1536
     llm: "gpt-3.5-turbo"
 
   local:

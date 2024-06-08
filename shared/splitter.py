@@ -1,4 +1,5 @@
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+import logging
 
 from shared.constants import ModelConstants, ConfigConstants
 from shared.models import Document
@@ -6,6 +7,7 @@ from shared.models import Document
 
 class TextSplitter:
     def __init__(self, config: dict):
+        self.logger = logging.getLogger(self.__class__.__name__)
         self.chunk_size = config.get(ConfigConstants.KEY_CHUNK_SIZE)
         self.chunk_overlap = config.get(ConfigConstants.KEY_CHUNK_OVERLAP)
         self.splitter = RecursiveCharacterTextSplitter(
@@ -13,7 +15,7 @@ class TextSplitter:
             chunk_overlap=self.chunk_overlap,
         )
 
-    def split_documents(self, documents: list[Document]) -> list[dict]:
+    def split_documents(self, documents: list[Document]) -> list[Document]:
         """Splits a list of documents into chunks.
 
         Args:

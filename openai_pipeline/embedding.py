@@ -2,6 +2,7 @@ from typing import Any
 from openai import OpenAI
 import logging
 
+from openai_pipeline.tokenizer import Tokenizer
 from shared.models import Document
 from shared.constants import ConfigConstants
 
@@ -12,6 +13,10 @@ class OpenAIEmbeddings:
     def __init__(self, config_openai: dict) -> None:
         self.logger = logging.getLogger(self.__class__.__name__)
         self.model = config_openai[ConfigConstants.KEY_EMBEDDING]
+        self.tokenizer = Tokenizer(
+            config_openai[ConfigConstants.KEY_EMBEDDING],
+            config_openai[ConfigConstants.KEY_MAX_TOKENS],
+        )
         self.client = OpenAI()
 
     def get_embeddings(self, texts: list[str]) -> list[list[float]]:
@@ -20,6 +25,10 @@ class OpenAIEmbeddings:
         self.logger.info("Creating embeddings ...")
         texts_cleaned = [text.replace("\n", " ") for text in texts]
 
+        if self.tokenizer.check_tokenlimit_exceeded(texts_cleaned):
+            self.logger.warning(
+                "Number of tokens exceeds the limit. Text will be truncated."
+            )
         responses = self.client.embeddings.create(input=texts_cleaned, model=self.model)
 
         assert len(responses.data) == len(texts)
