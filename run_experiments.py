@@ -21,8 +21,8 @@ def main():
 
     # OpenAI
     print("Running OpenAI pipeline ...")
-    # openai_pipeline = OpenAIPipeline(config, prompts_queries)
-    # results_openai: ExperimentResults = openai_pipeline.run_queries()
+    openai_pipeline = OpenAIPipeline(config, prompts_queries)
+    results_openai: ExperimentResults = openai_pipeline.run_queries()
 
     # Run with local
     print("Running local pipeline ...")
@@ -31,7 +31,7 @@ def main():
 
     # Save results to a file
     print("Saving results ...")
-    # save_experiment_results_to_json(results_openai, config["output"]["directory"])
+    save_experiment_results_to_json(results_openai, config["output"]["directory"])
     save_experiment_results_to_json(results_local, config["output"]["directory"])
     print("Done!")
 

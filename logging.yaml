@@ -16,7 +16,7 @@ handlers:
 
 loggers:
   '':
-    level: DEBUG
+    level: WARNING
     handlers: [console]
 
 # Specific loggers for your modules
