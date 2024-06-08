@@ -4,7 +4,7 @@ from shared.models import ExperimentResults
 from shared.utils import (
     load_config,
     load_prompt_queries,
-    save_experiment_results_to_json,
+    save_experiments_results_to_json,
     setup_logging,
 )
 from shared.constants import ConfigConstants
@@ -31,8 +31,9 @@ def main():
 
     # Save results to a file
     print("Saving results ...")
-    save_experiment_results_to_json(results_openai, config["output"]["directory"])
-    save_experiment_results_to_json(results_local, config["output"]["directory"])
+    save_experiments_results_to_json(
+        [results_openai, results_local], config["output"]["directory"]
+    )
     print("Done!")
 
 
