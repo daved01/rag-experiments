@@ -1,8 +1,7 @@
-from typing import Any
 from openai import OpenAI
 import logging
 
-from openai_pipeline.tokenizer import Tokenizer
+from openai_pipeline.tokenizer import OpenAITokenizer
 from shared.models import Document
 from shared.constants import ConfigConstants
 
@@ -13,7 +12,7 @@ class OpenAIEmbeddings:
     def __init__(self, config_openai: dict) -> None:
         self.logger = logging.getLogger(self.__class__.__name__)
         self.model_name = config_openai[ConfigConstants.KEY_EMBEDDING]
-        self.tokenizer = Tokenizer(
+        self.tokenizer = OpenAITokenizer(
             config_openai[ConfigConstants.KEY_EMBEDDING],
             config_openai[ConfigConstants.KEY_MAX_TOKENS],
         )

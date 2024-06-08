@@ -2,7 +2,7 @@ from sentence_transformers import SentenceTransformer
 from typing import Any
 import logging
 
-from local_pipeline.tokenizer import Tokenizer
+from local_pipeline.tokenizer import SentenceTransformerTokenizer
 from shared.models import Document
 from shared.constants import ConfigConstants
 
@@ -14,7 +14,7 @@ class LocalEmbeddings:
         self.logger = logging.getLogger(self.__class__.__name__)
         self.model_name = config_local["embedding"]
         self.model = SentenceTransformer(self.model_name)
-        self.tokenizer = Tokenizer(
+        self.tokenizer = SentenceTransformerTokenizer(
             config_local[ConfigConstants.KEY_EMBEDDING],
             config_local[ConfigConstants.KEY_MAX_TOKENS],
         )

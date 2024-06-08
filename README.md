@@ -14,11 +14,15 @@ I am working on a blog post series and associated experiments. Links will be add
 
 ## Quick Start
 
+Before you start, make sure to have your OpenAI API key set under `OPENAI_API_KEY`, if you want to run the OpenAI pipeline.
+
 1. Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
+
+If you also want to use a local LLAMA3 model, you have to install OLLAMA and download the model with `ollama pull llama3`. To do so, follow [these instructions](https://github.com/ollama/ollama). If you don't want to run the local pipeline, just comment it out.
 
 2. Configure the app settings in the config.yaml file.
 
@@ -47,6 +51,8 @@ pip install -r requirements.txt
 ```
 
 You might have to manually create two directories: `data` and `data/results`.
+
+As mentioned above, the local pipeline uses OLLAMA through Langchain to access `LLAMA3 8B`. Make sure you have OLLAMA installed and the llama model downloaded.
 
 ## Running Experiments
 

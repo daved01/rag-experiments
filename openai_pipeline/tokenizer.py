@@ -1,8 +1,10 @@
 import logging
 import tiktoken
 
+from shared import AbstractTokenizer
 
-class Tokenizer:
+
+class OpenAITokenizer(AbstractTokenizer):
     def __init__(self, model: str, max_tokens: int):
         self.logger = logging.getLogger(self.__class__.__name__)
         self.max_tokens = max_tokens
