@@ -1,7 +1,7 @@
 import logging
 from openai import OpenAI
 
-from openai_pipeline.tokenizer import Tokenizer
+from openai_pipeline.tokenizer import OpenAITokenizer
 from shared.constants import ConfigConstants
 
 
@@ -9,7 +9,7 @@ class OpenAILLM:
     def __init__(self, config_openai: dict) -> None:
         self.logger = logging.getLogger(self.__class__.__name__)
         self.model = config_openai[ConfigConstants.KEY_LLM]
-        self.tokenizer = Tokenizer(
+        self.tokenizer = OpenAITokenizer(
             self.model,
             config_openai[ConfigConstants.KEY_MAX_TOKENS],
         )

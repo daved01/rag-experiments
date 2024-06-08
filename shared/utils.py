@@ -47,15 +47,15 @@ def experiment_results_to_dict(experiment_results: ExperimentResults) -> dict:
     return serialize(asdict(experiment_results))
 
 
-def save_experiment_results_to_json(
-    experiment_results: ExperimentResults, base_path: str
+def save_experiments_results_to_json(
+    experiment_results: list[ExperimentResults], base_path: str
 ):
-    """Saves an `ExperimentResults` object as a json file."""
-    data_dict = experiment_results_to_dict(experiment_results)
+    """Saves a list of `ExperimentResults` objects to a json file."""
+    data_list = [experiment_results_to_dict(er) for er in experiment_results]
 
     curr_time = datetime.now()
     formatted_time = curr_time.strftime("%Y-%m-%d_%H-%M-%S")
     file_path = f"{base_path}/results_{formatted_time}.json"
     with open(file_path, "w") as json_file:
-        json.dump(data_dict, json_file, indent=4)
+        json.dump(data_list, json_file, indent=4)
     print(f"Saved results to file: {file_path}!")

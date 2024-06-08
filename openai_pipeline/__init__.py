@@ -23,7 +23,7 @@ class OpenAIPipeline:
         self.embedder_openai: OpenAIEmbeddings = OpenAIEmbeddings(
             config[ConfigConstants.KEY_PIPELINES][ConfigConstants.KEY_OPENAI]
         )
-        self.method: str = config[ConfigConstants.KEY_SPLITTER][
+        self.splitter_method: str = config[ConfigConstants.KEY_SPLITTER][
             ConfigConstants.KEY_METHOD
         ]
         self.chunk_size: int = config[ConfigConstants.KEY_SPLITTER][
@@ -33,7 +33,8 @@ class OpenAIPipeline:
             ConfigConstants.KEY_CHUNK_OVERLAP
         ]
         self.database: ChromaDB = ChromaDB(
-            config, f"openai_{self.method}_{self.chunk_size}_{self.chunk_overlap}"
+            config,
+            f"openai_{self.splitter_method}_{self.chunk_size}_{self.chunk_overlap}",
         )
         self.llm = OpenAILLM(
             config[ConfigConstants.KEY_PIPELINES][ConfigConstants.KEY_OPENAI]

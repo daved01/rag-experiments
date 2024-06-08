@@ -1,8 +1,7 @@
-from typing import Any
 from openai import OpenAI
 import logging
 
-from openai_pipeline.tokenizer import Tokenizer
+from openai_pipeline.tokenizer import OpenAITokenizer
 from shared.models import Document
 from shared.constants import ConfigConstants
 
@@ -12,8 +11,8 @@ class OpenAIEmbeddings:
 
     def __init__(self, config_openai: dict) -> None:
         self.logger = logging.getLogger(self.__class__.__name__)
-        self.model = config_openai[ConfigConstants.KEY_EMBEDDING]
-        self.tokenizer = Tokenizer(
+        self.model_name = config_openai[ConfigConstants.KEY_EMBEDDING]
+        self.tokenizer = OpenAITokenizer(
             config_openai[ConfigConstants.KEY_EMBEDDING],
             config_openai[ConfigConstants.KEY_MAX_TOKENS],
         )
@@ -29,7 +28,9 @@ class OpenAIEmbeddings:
             self.logger.warning(
                 "Number of tokens exceeds the limit. Text will be truncated."
             )
-        responses = self.client.embeddings.create(input=texts_cleaned, model=self.model)
+        responses = self.client.embeddings.create(
+            input=texts_cleaned, model=self.model_name
+        )
 
         assert len(responses.data) == len(texts)
 
@@ -38,7 +39,7 @@ class OpenAIEmbeddings:
     def add_embeddings_to_docs(self, documents: list[Document]) -> list[Document]:
         """Adds embeddings to Document objects."""
 
-        embeddings: list[float] = self.get_embeddings(
+        embeddings: list[list[float]] = self.get_embeddings(
             [doc.page_content for doc in documents]
         )
         assert len(embeddings) == len(documents)
