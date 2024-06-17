@@ -6,6 +6,10 @@ class ConfigConstants:
     KEY_CONFIG_DATABASE = "database"
     KEY_CONFIG_PATH = "path"
     KEY_EMBEDDING = "embedding"
+    KEY_EVALUATORS = "evaluators"
+    KEY_EVALUATORS_ORDER_AWARE = "order_aware"
+    KEY_EVALUATORS_ORDER_UNAWARE = "order_unaware"
+    KEY_EVALUATORS_ORDER_UNAWARE_K = "k"
     KEY_LOADER = "loader"
     KEY_LOCAL = "local"
     KEY_LLM = "llm"
@@ -25,6 +29,11 @@ class DatabaseConstants:
 
 class EmbeddingConstants:
     KEY_TEXT = "text"
+
+
+class InputConstants:
+    KEY_RELEVANT_DOCS = "relevant_docs"
+    KEY_QUERIES = "queries"
 
 
 class ModelConstants:

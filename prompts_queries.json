@@ -3,11 +3,39 @@
     "queries": [
         {
             "id": 1,
-            "text": "How does retrieval-augmented generation work?"
+            "text": "How does retrieval-augmented generation work?",
+            "relevant_docs": [
+                {
+                    "doc": "state-of-the-art results on a diverse set of generation tasks and outperforms comparably-sized T5\nmodels [32]. We refer to the BART generator parameters \u03b8as the parametric memory henceforth.\n2.4 Training\nWe jointly train the retriever and generator components without any direct supervision on what\ndocument should be retrieved. Given a \ufb01ne-tuning training corpus of input/output pairs (xj,yj), we\n3",
+                    "relevance": 3
+                },
+                {
+                    "doc": "H Retrieval Collapse\nIn preliminary experiments, we observed that for some tasks such as story generation [ 11], the\nretrieval component would \u201ccollapse\u201d and learn to retrieve the same documents regardless of the\ninput. In these cases, once retrieval had collapsed, the generator would learn to ignore the documents,\nand the RAG model would perform equivalently to BART. The collapse could be due to a less-explicit",
+                    "relevance": 2
+                }
+            ]
         },
         {
             "id": 2,
-            "text": "What does RAG stand for?"
+            "text": "What does RAG stand for?",
+            "relevant_docs": [
+                {
+                    "doc": "\"open-book\" retrieval-based approaches. Unlike REALM and T5+SSM, RAG enjoys strong results\nwithout expensive, specialized \u201csalient span masking\u201d pre-training [ 20]. It is worth noting that RAG\u2019s\nretriever is initialized using DPR\u2019s retriever, which uses retrieval supervision on Natural Questions\nand TriviaQA. RAG compares favourably to the DPR QA system, which uses a BERT-based \u201ccross-\nencoder\u201d to re-rank documents, along with an extractive reader. RAG demonstrates that neither a",
+                    "relevance": 3
+                },
+                {
+                    "doc": "H Retrieval Collapse\nIn preliminary experiments, we observed that for some tasks such as story generation [ 11], the\nretrieval component would \u201ccollapse\u201d and learn to retrieve the same documents regardless of the\ninput. In these cases, once retrieval had collapsed, the generator would learn to ignore the documents,\nand the RAG model would perform equivalently to BART. The collapse could be due to a less-explicit",
+                    "relevance": 3
+                },
+                {
+                    "doc": "Finally, we note that RAG can be used for sequence classi\ufb01cation tasks by considering the target class\nas a target sequence of length one, in which case RAG-Sequence and RAG-Token are equivalent.\n2.2 Retriever: DPR\nThe retrieval component p\u03b7(z|x)is based on DPR [26]. DPR follows a bi-encoder architecture:\np\u03b7(z|x)\u221dexp(\nd(z)\u22a4q(x))\nd(z) =BERTd(z),q(x) =BERTq(x)\nwhere d(z)is a dense representation of a document produced by a BERT BASE document encoder [8],",
+                    "relevance": 3
+                },
+                {
+                    "doc": "doc4",
+                    "relevance": 0
+                }
+            ]
         }
     ]
 }
