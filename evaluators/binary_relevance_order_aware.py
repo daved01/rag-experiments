@@ -1,36 +1,17 @@
-class OrderUnawareMetrics:
-    def __init__(self, relevant_docs: list[str]):
-        self.relevant_docs = relevant_docs
+from dataclasses import replace
 
-    def precision_at_k(self, retrieved_docs: list[str], k: int) -> float:
-        """Calculates Precision@k."""
-        retrieved_docs_at_k = retrieved_docs[:k]
-        relevant_count = sum(
-            [1 for doc in retrieved_docs_at_k if doc in self.relevant_docs]
-        )
-        return float(relevant_count / k)
-
-    def recall_at_k(self, retrieved_docs: list[str], k: int) -> float:
-        """Calculates Recall@k."""
-        retrieved_docs_at_k = retrieved_docs[:k]
-        relevant_count = sum(
-            [1 for doc in retrieved_docs_at_k if doc in self.relevant_docs]
-        )
-        return float(relevant_count / len(self.relevant_docs))
-
-    def f1_at_k(self, retrieved_docs: list[str], k: int) -> float:
-        """Calculates F1@k."""
-        precision = self.precision_at_k(retrieved_docs, k)
-        recall = self.recall_at_k(retrieved_docs, k)
-        if precision + recall == 0:
-            return 0.0
-        return float(2 * (precision * recall) / (precision + recall))
+from shared.models import (
+    ExperimentResults,
+    QueryResult,
+)
+from shared.constants import InputConstants
+from evaluators.base_evaluator import BaseEvaluator
 
 
-class OrderAwareMetrics:
-    """Calculates order aware metrics.
+class Metrics:
+    """Order Aware Metrics.
 
-    Supported metrics:
+    Supported metrics are:
     - RR, MRR
     - AP, MAP
 
@@ -71,11 +52,11 @@ class OrderAwareMetrics:
 
         num_queries = len(self.relevant_docs_all_queries)
 
-        mrr = 0
+        mrr = 0.0
         for ind in range(num_queries):
             mrr += self.reciprocal_rank(retrieved_docs_all_queries, ind)
 
-        return float(1 / num_queries * mrr)
+        return (1 / num_queries) * mrr
 
     def average_precision(
         self, retrieved_docs_all_queries: list[list[str]], query_index: int
@@ -103,3 +84,60 @@ class OrderAwareMetrics:
             nominator += self.average_precision(retrieved_docs_all_queries, ind)
 
         return float(nominator / num_queries)
+
+
+class Evaluator(BaseEvaluator):
+    """Evaluator for evaluation with order aware metrics."""
+
+    def __init__(self, config, queries: list[dict]):
+        self.relevant_docs: list[list[str]] = [
+            [q.get("doc") for q in query.get(InputConstants.KEY_RELEVANT_DOCS)]
+            for query in queries
+        ]
+
+    def run(self, experiment_results: ExperimentResults) -> ExperimentResults:
+        """Runs evaluation on order aware metrics."""
+
+        avg_evals = experiment_results.evaluations
+
+        query_results_obj: list[QueryResult] = experiment_results.results
+        retrieved_documents_list: list[list[str]] = [
+            q.contexts for q in query_results_obj
+        ]
+        query_evals: list[dict] = [q.evaluations for q in query_results_obj]
+        num_queries = len(query_results_obj)
+
+        # Calculate metrics
+        order_aware_metrics = Metrics(self.relevant_docs)
+
+        # Query-level metrics
+        query_results_with_evals = []
+
+        for i in range(num_queries):
+            rr = order_aware_metrics.reciprocal_rank(retrieved_documents_list, i)
+            ap = order_aware_metrics.average_precision(retrieved_documents_list, i)
+            query_evals[i]["RR"] = rr
+            query_evals[i]["AP"] = ap
+            updated_query_results_obj = replace(
+                query_results_obj[i], evaluations=query_evals[i]
+            )
+            query_results_with_evals.append(updated_query_results_obj)
+
+        # Overall metrics
+        mean_reciprocal_rank = order_aware_metrics.mean_reciprocal_rank(
+            retrieved_documents_list
+        )
+        mean_average_precision = order_aware_metrics.mean_average_precision(
+            retrieved_documents_list
+        )
+        avg_evals["MRR"] = mean_reciprocal_rank
+        avg_evals["MAP"] = mean_average_precision
+
+        # Update ExperimentResults
+        results_with_metrics = replace(
+            experiment_results,
+            results=query_results_with_evals,
+            evaluations=avg_evals,
+        )
+
+        return results_with_metrics

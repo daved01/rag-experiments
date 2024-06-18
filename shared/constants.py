@@ -34,6 +34,8 @@ class EmbeddingConstants:
 class InputConstants:
     KEY_RELEVANT_DOCS = "relevant_docs"
     KEY_QUERIES = "queries"
+    KEY_DOC = "doc"
+    KEY_RELEVANCE = "relevance"
 
 
 class ModelConstants:

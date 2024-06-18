@@ -7,12 +7,8 @@ from shared.utils import (
     save_experiments_results_to_json,
     setup_logging,
 )
-from shared.constants import ConfigConstants, InputConstants
-from evaluators import (
-    OrderUnawareEvaluators,
-    OrderAwareEvaluators,
-    GradedRelevanceEvaluators,
-)
+from shared.constants import ConfigConstants
+from evaluators import RetrievalEvaluator
 
 
 PROMPT_QUERIES_FILE = "prompts_queries.json"
@@ -30,23 +26,8 @@ def main():
     results_openai: ExperimentResults = openai_pipeline.run_queries()
 
     print("Evaluating results ...")
-    evaluator_order_unaware_evaluators = OrderUnawareEvaluators(
-        config, prompts_queries.get(InputConstants.KEY_QUERIES)
-    )
-    # TODO: Modify so that they accept existing evals
-    results_with_eval_openai = evaluator_order_unaware_evaluators.run(results_openai)
-
-    evaluator_order_aware_evaluators = OrderAwareEvaluators(
-        config, prompts_queries.get(InputConstants.KEY_QUERIES)
-    )
-    results_with_eval_openai = evaluator_order_aware_evaluators.run(
-        results_with_eval_openai
-    )
-
-    graded_relevance_evaluators = GradedRelevanceEvaluators(
-        config, prompts_queries.get(InputConstants.KEY_QUERIES)
-    )
-    results_with_eval_openai = graded_relevance_evaluators.run(results_with_eval_openai)
+    retrieval_evaluators = RetrievalEvaluator(config, prompts_queries)
+    results_with_evals_openai = retrieval_evaluators.run(results_openai)
 
     # Run with local
     print("Running local pipeline ...")
@@ -57,7 +38,7 @@ def main():
     # Save results to a file
     print("Saving results ...")
     save_experiments_results_to_json(
-        [results_with_eval_openai],
+        [results_with_evals_openai],
         config["output"]["directory"],
     )
     print("Done!")

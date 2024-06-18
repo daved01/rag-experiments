@@ -1,13 +1,13 @@
 import pytest
 
-from evaluators.binary_relevance import OrderUnawareMetrics
+from evaluators.binary_relevance_order_unaware import Metrics
 
 
 class TestOrderUnaware:
     @pytest.fixture
     def order_unaware_metrics(self):
         relevant_docs = ["doc1", "doc2", "doc3"]
-        return OrderUnawareMetrics(relevant_docs)
+        return Metrics(relevant_docs)
 
 
 class TestPrecisionAtK(TestOrderUnaware):
@@ -124,7 +124,3 @@ class TestF1AtK(TestOrderUnaware):
         k = 2
         expected_f1 = 0.0
         assert order_unaware_metrics.f1_at_k(retrieved_docs, k) == expected_f1
-
-
-class TestOrderAware:
-    pass
