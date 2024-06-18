@@ -61,7 +61,23 @@ Once installed you can run experiments on the pipelines. To configure them, use 
 ### Configuration Files
 
 - `config.yaml`: Contains settings and parameters for running experiments.
-- `prompt_queries.json`: Holds the prompt template and a list of queries for the experiments. Each query triggers a separate run of all pipelines.
+- `prompt_queries.json`: Holds the prompt template and a list of queries for the experiments, as well as the ground-truth documents for evaluation. Each query triggers a separate run of all pipelines.
+
+### Adding Evaluators
+
+Evaluators are defined in `evaluators`. The top-level class `RetrievalEvaluator` is an evaluator service, to which all evaluators you want to run are added in the `run()` method.
+
+Each evaluator must implement the `BaseEvaluator` and makes use of a number of metrics. All evaluator `run()` methods accept an `ExperimentResults` object with or without existing evaluations. The methods return the same object with evaluations appended.
+
+Once all evaluators are defined you can add your evaluator service in `run_experiment()` like this:
+
+```Python
+# Initialize with config and experiment inputs.
+retrieval_evaluators = RetrievalEvaluator(config, prompts_queries)
+
+# Run evaluators
+results_with_evals = retrieval_evaluators.run(results_with_or_without_evals)
+```
 
 ### Running Scripts
 
@@ -78,11 +94,14 @@ The project is modular and meant to be extended. You can add advanced methods to
 - `shared`: Contains code that is shared of each component, including loader and splitter. Note that the database uses collections to separate data for each pipeline.
 - `openai_pipeline`: Code specific to the OpenAI pipeline.
 - `local_pipeline`: Code specific to the local pipeline.
+- `evaluators`: Code for evaluators.
 
 Each pipeline contains two parts.
 
 - `llm.py`: Handles LLM interactions, including the prompt.
 - `embedding.py`: Manages embeddings.
+
+The pipeline is then defined in the `__init__.py`, for example `OpenAIPipeline` using the components.
 
 ### OpenAI pipeline
 

@@ -25,3 +25,9 @@ pipelines:
 
 output:
   directory: "data/results"
+
+evaluators:
+  order_unaware:
+    k: 3
+  order_aware:
+    k: 3

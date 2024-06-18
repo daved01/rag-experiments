@@ -1,0 +1,25 @@
+name: Run tests
+on:
+  pull_request:
+  push:
+    branches:
+    - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Code quality checks
+    
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: 3.11
+
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install -r requirements_dev.txt
+
+    - name: Run tests
+      run: pytest

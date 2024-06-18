@@ -23,6 +23,7 @@ class QueryResult:
     contexts: list[str]
     prompt: str
     response: str
+    evaluations: Optional[dict] = None
 
 
 @dataclass
@@ -31,3 +32,4 @@ class ExperimentResults:
     model: str
     parameters: dict[str, any]
     timestamp_end: Optional[time]
+    evaluations: Optional[dict] = None
